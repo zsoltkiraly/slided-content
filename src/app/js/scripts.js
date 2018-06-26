@@ -41,7 +41,7 @@ var slidedContent = function() {
 
         setTimeout(function() {
             disParam.classList.remove('disabled-click');
-        }, 500);
+        }, 600);
     }
 
     function navigation(sC, cB, iL, cL, cE) {
@@ -71,7 +71,7 @@ var slidedContent = function() {
 
                 setTimeout(function() {
                     cL.style.transition = '';
-                }, 500);
+                }, 600);
 
                 navigationPrev.classList.remove('in-active');
 
@@ -117,7 +117,7 @@ var slidedContent = function() {
 
                 setTimeout(function() {
                     cL.style.transition = '';
-                }, 500);
+                }, 600);
 
                 navigationNext.classList.remove('in-active');
 
@@ -150,57 +150,90 @@ var slidedContent = function() {
         }, false);
 
         var startx = 0,
-            dist = 0,
+            starty = 0,
+            distx = 0,
+            disty = 0,
+            gap = 15,
+            yMax = 15,
             sliderUlGet = 0,
-            sliderInnerLine = 0,
             sliderLiWidth = 0;
 
         cB.addEventListener('touchstart', function(e) {
+
             var touchobj = e.changedTouches[0];
-            startx = parseFloat(touchobj.pageX);
+            startx = parseInt(touchobj.clientX);
+            starty = parseInt(touchobj.clientY);
+
             sliderUlGet = (parseFloat(cL.style.marginLeft, 10) * -1);
-            sliderInnerLine = parseFloat(iL.style.width, 10);
-            sliderLiWidth = parseFloat(cE[0].style.width, 10)
+            sliderLiWidth = parseFloat(cE[0].style.width, 10);
+
         }, false);
 
         cB.addEventListener('touchmove', function(e) {
-            var touchobj = e.changedTouches[0];
-            var dist = parseFloat(touchobj.pageX) - startx;
+            var touchobj = e.changedTouches[0],
+                distx = parseInt(touchobj.clientX) - startx,
+                disty = parseInt(touchobj.clientY) - starty;
 
-            if (sliderUlGet == (sliderLiWidth * cE.length - (sliderLiWidth))) {
-                if (dist > 10) {
-                    cL.style.marginLeft = '-' + (sliderUlGet - dist) + 'px';
+            function gapSlide(d) {
+                if (sliderUlGet == (sliderLiWidth * cE.length - (sliderLiWidth))) {
+                    if (d > gap*1.5) {
+                        cL.style.marginLeft = '-' + (sliderUlGet - d) + 'px';
+                    }
+                } else {
+                    cL.style.marginLeft = '-' + (sliderUlGet - d) + 'px';
                 }
-            } else {
-                cL.style.marginLeft = '-' + (sliderUlGet - dist) + 'px';
+            }
+
+            if(distx > gap*1.5 && Math.abs(disty) < yMax) {
+                distx = parseInt(touchobj.clientX) - gap - startx;
+
+                gapSlide(distx);
+
+            } else if(distx < -gap*1.5 && Math.abs(disty) < yMax) {
+                distx = parseInt(touchobj.clientX) + gap - startx;
+
+                gapSlide(distx);
             }
         }, false);
 
         cB.addEventListener('touchend', function(e) {
-            var touchobj = e.changedTouches[0];
-            var dist = parseFloat(touchobj.pageX) - startx;
+            var touchobj = e.changedTouches[0],
+                distx = parseInt(touchobj.clientX) - startx,
+                disty = parseInt(touchobj.clientY) - starty;
 
-            if (dist < -50) {
-                nextSlide(sC, iL, cL, cE, dist);
+            if (distx > gap*1.5 && Math.abs(disty) < yMax) {
+                if(sliderUlGet !== 0) {
+                    distx = distx - gap;
+                    prevSlide(sC, iL, cL, cE, distx);
 
-                if (sliderUlGet == (sliderLiWidth * cE.length - (sliderLiWidth * 2))) {
-                    navigationNext.classList.add('in-active');
+                    if (sliderUlGet == sliderLiWidth) {
+                        navigationPrev.classList.add('in-active');
+                    }
                 }
-            } else if (dist > 50) {
-                prevSlide(sC, iL, cL, cE, dist);
+            } else if (distx < -gap*1.5 && Math.abs(disty) < yMax) {
+                if (sliderUlGet !== (sliderLiWidth * cE.length - (sliderLiWidth))) {
 
-                if (sliderUlGet == sliderLiWidth) {
-                    navigationPrev.classList.add('in-active');
+                    distx = distx + gap;
+                    nextSlide(sC, iL, cL, cE, distx);
+
+                    if (sliderUlGet == (sliderLiWidth * cE.length - (sliderLiWidth * 2))) {
+                        navigationNext.classList.add('in-active');
+                    }
                 }
+
             } else {
+
+                var sliderLiActive = cL.querySelector('li.content-element.active'),
+                    sliderActiveDataId = parseFloat(sliderLiActive.getAttribute('data-id'), 10),
+                    sliderActiveDistance = (sliderActiveDataId * parseFloat(sliderLiActive.style.width, 10) - parseFloat(sliderLiActive.style.width, 10));
 
                 cL.style.transition = 'all ' + 500 + 'ms';
 
                 setTimeout(function() {
                     cL.style.transition = '';
-                }, 500);
+                }, 600);
 
-                cL.style.marginLeft = '-' + sliderUlGet + 'px';
+                cL.style.marginLeft = '-' + sliderActiveDistance + 'px';
             }
         }, false);
 
@@ -257,7 +290,7 @@ var slidedContent = function() {
 
                         setTimeout(function() {
                             cL.style.transition = '';
-                        }, 500);
+                        }, 600);
 
                     } else {
                         cEs.classList.remove('active');
