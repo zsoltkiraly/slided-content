@@ -1,7 +1,7 @@
 # Slided content v1.0.5
 
 <br />
-<a href="http://zsoltkiraly.com/developments/slided-content/" target="_blank">DEMO PAGE</a>
+<a href="https://zsoltkiraly.com/developments/slided-content/" target="_blank">DEMO PAGE</a>
 
 #
 <br />
