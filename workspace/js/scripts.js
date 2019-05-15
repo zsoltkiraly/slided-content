@@ -1,11 +1,32 @@
-'use strict';
-
 /*
 Slided content - Code by Zsolt Király
 v1.1.8 - 2018-06-22
 */
 
+'use strict';
 var slidedContent = function() {
+
+    function signatura() {
+        if (window['console']) {
+            const text = {
+                black: '%c     ',
+                blue: '%c   ',
+                author: '%c  Zsolt Király  ',
+                github: '%c  https://zsoltkiraly.com/'
+            }
+
+            const style = {
+                black: 'background: #282c34',
+                blue: 'background: #61dafb',
+                author: 'background: black; color: white',
+                github: ''
+            }
+
+            console.log(text.black + text.blue + text.author + text.github, style.black, style.blue, style.author, style.github);
+        }
+    }
+
+    signatura();
 
     function getWidth() {
         return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -333,7 +354,7 @@ var slidedContent = function() {
         }, 1000);
     }
 
-    function app() {
+    function app(config) {
         var slidedContent = document.querySelector('#'+ config.render +'.slided-content');
 
         if (slidedContent) {
@@ -367,5 +388,4 @@ var slidedContent = function() {
     return {
         app: app
     }
-
 }();

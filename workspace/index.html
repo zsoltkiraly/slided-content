@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8">
 
-    <link rel="stylesheet" href="css/demo.css">
+    <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="css/main.css">
-
-    <script src="js/scripts.js"></script>
+    <script src="js/scripts.min.js"></script>
 </head>
 
 <body>
@@ -104,12 +103,10 @@
     </section>
 
     <script type="application/javascript">
-        window.addEventListener('load', function() {
-            slidedContent.app(
-                config = {
-                    render: 'slided-content-1'
-                }
-            );
+        window.addEventListener('load', ()=> {
+            slidedContent.app({
+                render: 'slided-content-1'
+            });
         }, false);
     </script>
 
